@@ -4,9 +4,10 @@ import java.net.Socket;
 
 public class SocketManager {
 
-    private int serverPort;
+    int port;
 
-    SocketManager(int serverPort) {
+    SocketManager(int port) {
+        this.port = port;
         this.startServer();
     }
 
@@ -15,11 +16,11 @@ public class SocketManager {
         Socket socket = null;
 
         try {
-            serverSocket = new ServerSocket(serverPort);
+            serverSocket = new ServerSocket(this.port);
+            System.out.println("Server listening on port " + this.port);
         }
         catch (IOException e) {
             e.printStackTrace();
-
         }
         while (true) {
             try {

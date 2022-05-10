@@ -1,18 +1,18 @@
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 
-public class SocketThread extends Thread {
+public class SocketManager {
 
+    String address;
+    int port;
     Socket socket;
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
 
-    SocketThread(Socket socket) {
-        this.socket = socket;
-    }
+    SocketManager(String address, int port) {
+        this.address = address;
+        this.port = port;
 
-    public void run() {
         try {
             this.waitMessages();
         }
@@ -21,29 +21,37 @@ public class SocketThread extends Thread {
         }
     }
 
+    String getAddress() {
+        return this.address;
+    }
+    int getPort() {
+        return this.port;
+    }
+
     public void sendMessage(String message) throws Exception {
-        this.outputStream.writeBytes(message);
         this.outputStream.flush();
+        this.outputStream.write(message.getBytes());
+        this.outputStream.write('\n');
     }
 
     private void readMessage(String message) {
-        System.out.println("Message received from client:");
+        System.out.println("Message received from server:");
         System.out.println(message);
     }
 
     private void waitMessages() throws Exception {
-        System.out.println("New client detected");
-
         try {
-            InputStream inputStream = socket.getInputStream();
-            this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
+            System.out.println("Connecting to host " + this.address + ":" + this.port + "...");
+            this.socket = new Socket(this.address, this.port);
             this.outputStream = new DataOutputStream(socket.getOutputStream());
+            this.bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
+            System.out.println("Connected!");
         }
         catch (IOException e) {
-            System.out.println("Exception in message reader");
             e.printStackTrace();
             throw new Exception();
         }
+
         while (true) {
             try {
                 String line = this.bufferedReader.readLine();
@@ -55,10 +63,6 @@ public class SocketThread extends Thread {
                 else {
                     this.readMessage(line);
                 }
-            }
-            catch (SocketException e) {
-                System.out.println("Client disconnected");
-                return;
             }
             catch (IOException e) {
                 System.out.println("Exception in message reader");
