@@ -14,6 +14,8 @@ public class CommandInterpreter {
 
         if (commandName.equalsIgnoreCase("channel"))
             return this.channel(user, rest);
+        else if (commandName.equalsIgnoreCase("message"))
+            return this.message(user, rest);
         else
             return "error Unknown command";
     }
@@ -30,8 +32,32 @@ public class CommandInterpreter {
             else
                 return "error Unknown channel";
         }
+        else if (subCommand.equalsIgnoreCase("create")) {
+            Channel channel = this.chatManager.createChannel(user);
+            return "channel created " + channel.getUuid();
+        }
         else
             return "error Unknown subcommand";
+    }
+
+    private String message(User user, String args) {
+        String subCommand, rest;
+        String[] parts = args.split(" ", 2);
+        subCommand = parts[0].trim();
+        rest = parts[1].trim();
+        if (subCommand.equalsIgnoreCase("create")) {
+            parts = rest.split(" ", 2);
+            String channelUuid = parts[0];
+            String content = parts[1];
+            Message message = this.chatManager.sendMessage(user, channelUuid, content);
+            return "message created";
+        }
+        else
+            return "error Unknown subcommand";
+    }
+
+    public static void sendCommand() {
+        // todo: send command
     }
 
 }

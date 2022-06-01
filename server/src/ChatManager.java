@@ -14,8 +14,8 @@ public class ChatManager {
         return this.users;
     }
 
-    public User newUser(String uuid) {
-        User user = new User(uuid);
+    public User newUser(String uuid, SocketRunnable socketRunnable) {
+        User user = new User(uuid, socketRunnable);
         users.add(user);
         return user;
     }
@@ -27,22 +27,50 @@ public class ChatManager {
         return channel;
     }
 
-    public void userDisconnect(User user) {
+    public void userDisconnect(String uuid) {
+        User user = findUserByUuid(uuid);
         Channel channel = findUserChannel(user);
         if (channel != null)
             channel.userDisconnect(user);
     }
 
+    public Channel createChannel(User user) {
+        Channel channel = new Channel(Utils.getUUID());
+        this.channels.add(channel);
+        channel.userConnect(user);
+        return channel;
+    }
+
+    public Message sendMessage(User user, String channelUuid, String content) {
+        Channel channel = findChannelByUuid(channelUuid);
+        Message message = new Message(user, content, channel);
+        channel.addMessage(message);
+
+        for (User usr : channel.getUsersConnected()) {
+            // todo: send message
+        }
+
+        return message;
+    }
+
+    private User findUserByUuid(String uuid) {
+        for (User user : this.getUsers()) {
+            if (user.getUuid().equalsIgnoreCase(uuid))
+                return user;
+        }
+        return null;
+    }
+
     private Channel findChannelByUuid(String uuid) {
         Channel channel = null;
         for (Channel chan : this.channels) {
-            if (chan.getUuid() == uuid) {
+            if (chan.getUuid().equalsIgnoreCase(uuid)) {
                 channel = chan;
                 break;
             }
         }
         for (User usr : this.users) {
-            if (usr.getUuid() == uuid) {
+            if (usr.getUuid().equalsIgnoreCase(uuid)) {
                 channel = usr;
                 break;
             }

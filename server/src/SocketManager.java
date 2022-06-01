@@ -45,11 +45,18 @@ public class SocketManager implements Runnable {
             String uuid = Utils.getUUID();
             SocketRunnable runnable = new SocketRunnable(socket, this, uuid);
             Thread socketThread = new Thread(runnable);
-            this.chatManager.newUser(uuid);
+            this.chatManager.newUser(uuid, runnable);
             runnables.put(uuid, runnable);
             threads.put(uuid, socketThread);
             socketThread.start();
         }
+    }
+
+    public void runnableDisconnect(String uuid) {
+        threads.get(uuid).interrupt();
+        runnables.remove(uuid);
+        threads.remove(uuid);
+        this.chatManager.userDisconnect(uuid);
     }
 
     public SocketRunnable getSocketRunnable(String uuid) {

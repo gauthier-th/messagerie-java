@@ -64,6 +64,7 @@ public class SocketRunnable implements Runnable {
             }
             catch (SocketException e) {
                 System.out.println("Client disconnected");
+                this.socketManager.runnableDisconnect(uuid);
                 return;
             }
             catch (IOException e) {
