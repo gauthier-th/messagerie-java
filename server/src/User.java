@@ -1,30 +1,14 @@
 import java.util.Date;
 import java.util.UUID;
 
-public class User {
+public class User extends Channel {
 
-    private String uuid;
-    private String username;
     private Date loggingDate;
 
-    User(String username) {
-        this.uuid = UUID.randomUUID().toString();
-        this.username = username;
+    User(String uuid) {
+        super(uuid);
+        this.name = "Anonymous " + this.uuid;
         this.loggingDate = new Date();
-    }
-
-    public String getUuid() {
-        return uuid;
-    }
-    public void setUuid(String uuid) {
-        this.uuid = uuid;
-    }
-
-    public String getUsername() {
-        return username;
-    }
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public Date getLoggingDate() {

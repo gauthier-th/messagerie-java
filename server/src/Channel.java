@@ -2,17 +2,28 @@ import java.util.ArrayList;
 
 public class Channel {
 
+    protected String uuid;
+    protected String name = null;
     protected ChannelOptions channelOptions;
     private ArrayList<User> usersConnected;
     private ArrayList<Message> messages;
 
-    Channel(String name) {
-        this(new ChannelOptions(name));
-    }
-    Channel(ChannelOptions channelOptions) {
-        this.channelOptions = channelOptions;
+    Channel(String uuid) {
+        this.uuid = uuid;
+        this.channelOptions = new ChannelOptions();
         this.usersConnected = new ArrayList<>();
         this.messages = new ArrayList<>();
+    }
+
+    public String getUuid() {
+        return this.uuid;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 
     public ChannelOptions getChannelOptions() {

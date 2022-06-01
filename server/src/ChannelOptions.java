@@ -1,29 +1,25 @@
 public class ChannelOptions {
 
-    private String name;
+    private String name = null;
     private String password = null;
     private int maxMessageCount = 100;
 
-    ChannelOptions(String name) {
-        this.name = name;
-    }
-
     public String getName() {
-        return password;
+        return this.name;
     }
     public void setName(String name) {
         this.name = name;
     }
 
     public String getPassword() {
-        return password;
+        return this.password;
     }
     public void setPassword(String password) {
         this.password = password;
     }
 
     public int getMaxMessageCount() {
-        return maxMessageCount;
+        return this.maxMessageCount;
     }
     public void setMaxMessageCount(int maxMessageCount) {
         this.maxMessageCount = maxMessageCount;

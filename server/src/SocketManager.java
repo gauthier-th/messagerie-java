@@ -1,16 +1,20 @@
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.ArrayList;
+import java.util.HashMap;
 
 public class SocketManager implements Runnable {
 
     int port;
-    ArrayList<SocketRunnable> runnables;
+    ChatManager chatManager;
+    HashMap<String, SocketRunnable> runnables;
+    HashMap<String, Thread> threads;
 
-    SocketManager(int port) {
+    SocketManager(int port, ChatManager chatManager ) {
         this.port = port;
-        this.runnables = new ArrayList<>();
+        this.chatManager = chatManager;
+        this.runnables = new HashMap<>();
+        this.threads = new HashMap<>();
     }
 
     @Override
@@ -38,14 +42,21 @@ public class SocketManager implements Runnable {
                 System.out.println("I/O error: " + e);
             }
             // new thread for a client
-            SocketRunnable runnable = new SocketRunnable(socket);
-            Thread thread = new Thread(runnable);
-            thread.start();
-            runnables.add(runnable);
+            String uuid = Utils.getUUID();
+            SocketRunnable runnable = new SocketRunnable(socket, this, uuid);
+            Thread socketThread = new Thread(runnable);
+            this.chatManager.newUser(uuid);
+            runnables.put(uuid, runnable);
+            threads.put(uuid, socketThread);
+            socketThread.start();
         }
     }
 
-    public ArrayList<SocketRunnable> getThreads() {
-        return runnables;
+    public SocketRunnable getSocketRunnable(String uuid) {
+        return runnables.get(uuid);
+    }
+
+    public Thread getSocketThread(String uuid) {
+        return threads.get(uuid);
     }
 }

@@ -5,11 +5,15 @@ import java.net.SocketException;
 public class SocketRunnable implements Runnable {
 
     Socket socket;
+    SocketManager socketManager;
+    String uuid;
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
 
-    SocketRunnable(Socket socket) {
+    SocketRunnable(Socket socket, SocketManager socketManager, String uuid) {
         this.socket = socket;
+        this.socketManager = socketManager;
+        this.uuid = uuid;
     }
 
     @Override

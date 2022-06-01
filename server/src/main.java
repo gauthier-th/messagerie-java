@@ -4,7 +4,8 @@ public class main {
 
     public static void main(String[] args) {
         int port = 3000;
-        SocketManager socketManager = new SocketManager(port);
+        ChatManager chatManager = new ChatManager();
+        SocketManager socketManager = new SocketManager(port, chatManager);
         new Thread(socketManager).start();
 
         while (true) {
@@ -14,7 +15,8 @@ public class main {
             if (message.length() == 0)
                 continue;
             try {
-                socketManager.getThreads().get(0).sendMessage(message);
+                User user = chatManager.getUsers().get(0);
+                socketManager.getSocketRunnable(user.getUuid()).sendMessage(message);
             }
             catch (Exception e) {
                 System.out.println("Unable to send message.");
