@@ -2,16 +2,17 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
-public class SocketThread extends Thread {
+public class SocketRunnable implements Runnable {
 
     Socket socket;
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
 
-    SocketThread(Socket socket) {
+    SocketRunnable(Socket socket) {
         this.socket = socket;
     }
 
+    @Override
     public void run() {
         try {
             this.waitMessages();
@@ -22,8 +23,9 @@ public class SocketThread extends Thread {
     }
 
     public void sendMessage(String message) throws Exception {
-        this.outputStream.writeBytes(message);
         this.outputStream.flush();
+        this.outputStream.write(message.getBytes());
+        this.outputStream.write('\n');
     }
 
     private void readMessage(String message) {

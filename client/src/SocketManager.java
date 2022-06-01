@@ -1,7 +1,8 @@
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
-public class SocketManager {
+public class SocketManager implements Runnable {
 
     String address;
     int port;
@@ -12,13 +13,6 @@ public class SocketManager {
     SocketManager(String address, int port) {
         this.address = address;
         this.port = port;
-
-        try {
-            this.waitMessages();
-        }
-        catch (Exception e) {
-            return;
-        }
     }
 
     String getAddress() {
@@ -26,6 +20,16 @@ public class SocketManager {
     }
     int getPort() {
         return this.port;
+    }
+
+    @Override
+    public void run() {
+        try {
+            this.waitMessages();
+        }
+        catch (Exception e) {
+            return;
+        }
     }
 
     public void sendMessage(String message) throws Exception {
@@ -43,8 +47,9 @@ public class SocketManager {
         try {
             System.out.println("Connecting to host " + this.address + ":" + this.port + "...");
             this.socket = new Socket(this.address, this.port);
+            InputStream inputStream = this.socket.getInputStream();
+            this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             this.outputStream = new DataOutputStream(socket.getOutputStream());
-            this.bufferedReader = new BufferedReader(new InputStreamReader(this.socket.getInputStream()));
             System.out.println("Connected!");
         }
         catch (IOException e) {
@@ -63,6 +68,10 @@ public class SocketManager {
                 else {
                     this.readMessage(line);
                 }
+            }
+            catch (SocketException e) {
+                System.out.println("Server disconnected");
+                return;
             }
             catch (IOException e) {
                 System.out.println("Exception in message reader");
