@@ -1,6 +1,7 @@
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.function.Consumer;
 
 public class SocketManager implements Runnable {
 
@@ -9,6 +10,8 @@ public class SocketManager implements Runnable {
     Socket socket;
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
+
+    private Runnable connectedCallback = null;
 
     private static SocketManager socketManager = null;
     private static Thread socketManagerThread = null;
@@ -32,6 +35,13 @@ public class SocketManager implements Runnable {
     }
     int getPort() {
         return this.port;
+    }
+
+    public Runnable getConnectedCallback() {
+        return connectedCallback;
+    }
+    public void setConnectedCallback(Runnable connectedCallback) {
+        this.connectedCallback = connectedCallback;
     }
 
     @Override
@@ -62,6 +72,8 @@ public class SocketManager implements Runnable {
             this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             this.outputStream = new DataOutputStream(socket.getOutputStream());
             System.out.println("Connected!");
+            if (this.connectedCallback != null)
+                this.connectedCallback.run();
         }
         catch (IOException e) {
             e.printStackTrace();
