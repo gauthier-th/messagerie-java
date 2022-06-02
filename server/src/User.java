@@ -20,4 +20,7 @@ public class User extends Channel {
         this.loggingDate = loggingDate;
     }
 
+    public SocketRunnable getSocketRunnable() {
+        return socketRunnable;
+    }
 }

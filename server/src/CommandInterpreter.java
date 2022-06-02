@@ -50,14 +50,14 @@ public class CommandInterpreter {
             String channelUuid = parts[0];
             String content = parts[1];
             Message message = this.chatManager.sendMessage(user, channelUuid, content);
-            return "message created";
+            return messageToCommand(message);
         }
         else
             return "error Unknown subcommand";
     }
 
-    public static void sendCommand() {
-        // todo: send command
+    public static String messageToCommand(Message message) {
+        return "message created " + message.getAuthor().getUuid() + " " + message.getContent();
     }
 
 }

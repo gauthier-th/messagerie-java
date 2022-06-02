@@ -26,10 +26,13 @@ public class SocketRunnable implements Runnable {
         }
     }
 
-    public void sendMessage(String message) throws Exception {
-        this.outputStream.flush();
-        this.outputStream.write(message.getBytes());
-        this.outputStream.write('\n');
+    public void sendMessage(String message) {
+        try {
+            this.outputStream.flush();
+            this.outputStream.write(message.getBytes());
+            this.outputStream.write('\n');
+        }
+        catch (Exception e) {}
     }
 
     private void readMessage(String message) {

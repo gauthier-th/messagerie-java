@@ -46,8 +46,9 @@ public class ChatManager {
         Message message = new Message(user, content, channel);
         channel.addMessage(message);
 
+        String command = CommandInterpreter.messageToCommand(message);
         for (User usr : channel.getUsersConnected()) {
-            // todo: send message
+            usr.getSocketRunnable().sendMessage(command);
         }
 
         return message;
