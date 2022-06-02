@@ -10,9 +10,21 @@ public class SocketManager implements Runnable {
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
 
+    private static SocketManager socketManager = null;
+    private static Thread socketManagerThread = null;
+
     SocketManager(String address, int port) {
         this.address = address;
         this.port = port;
+    }
+
+    public static SocketManager getInstance() {
+        return socketManager;
+    }
+    public static void startManager(String address, int port) {
+        socketManager = new SocketManager(address, port);
+        socketManagerThread = new Thread(socketManager);
+        socketManagerThread.start();
     }
 
     String getAddress() {
@@ -26,9 +38,8 @@ public class SocketManager implements Runnable {
     public void run() {
         try {
             this.waitMessages();
-        }
-        catch (Exception e) {
-            return;
+        } catch (Exception e) {
+            e.printStackTrace();
         }
     }
 
