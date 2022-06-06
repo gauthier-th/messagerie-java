@@ -12,6 +12,7 @@ public class SocketManager implements Runnable {
     DataOutputStream outputStream;
 
     private Runnable connectedCallback = null;
+    private CommandInterpreter commandInterpreter = null;
 
     private static SocketManager socketManager = null;
     private static Thread socketManagerThread = null;
@@ -44,6 +45,13 @@ public class SocketManager implements Runnable {
         this.connectedCallback = connectedCallback;
     }
 
+    public CommandInterpreter getCommandInterpreter() {
+        return commandInterpreter;
+    }
+    public void setCommandInterpreter(CommandInterpreter commandInterpreter) {
+        this.commandInterpreter = commandInterpreter;
+    }
+
     @Override
     public void run() {
         try {
@@ -53,15 +61,23 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public void sendMessage(String message) throws Exception {
-        this.outputStream.flush();
-        this.outputStream.write(message.getBytes());
-        this.outputStream.write('\n');
+    public void sendMessage(String message) {
+        try {
+            this.outputStream.flush();
+            this.outputStream.write(message.getBytes());
+            this.outputStream.write('\n');
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void readMessage(String message) {
         System.out.println("Message received from server:");
         System.out.println(message);
+        if (this.commandInterpreter != null) {
+            commandInterpreter.executeCommand(message);
+        }
     }
 
     private void waitMessages() throws Exception {
@@ -72,8 +88,10 @@ public class SocketManager implements Runnable {
             this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             this.outputStream = new DataOutputStream(socket.getOutputStream());
             System.out.println("Connected!");
-            if (this.connectedCallback != null)
+            if (this.connectedCallback != null) {
                 this.connectedCallback.run();
+                this.connectedCallback = null;
+            }
         }
         catch (IOException e) {
             e.printStackTrace();

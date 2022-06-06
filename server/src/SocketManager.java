@@ -9,12 +9,14 @@ public class SocketManager implements Runnable {
     ChatManager chatManager;
     HashMap<String, SocketRunnable> runnables;
     HashMap<String, Thread> threads;
+    CommandInterpreter commandInterpreter;
 
     SocketManager(int port, ChatManager chatManager ) {
         this.port = port;
         this.chatManager = chatManager;
         this.runnables = new HashMap<>();
         this.threads = new HashMap<>();
+        this.commandInterpreter = new CommandInterpreter(chatManager);
     }
 
     @Override
@@ -65,5 +67,9 @@ public class SocketManager implements Runnable {
 
     public Thread getSocketThread(String uuid) {
         return threads.get(uuid);
+    }
+
+    public CommandInterpreter getCommandInterpreter() {
+        return this.commandInterpreter;
     }
 }

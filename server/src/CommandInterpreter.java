@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 public class CommandInterpreter {
 
     ChatManager chatManager;
@@ -6,11 +8,16 @@ public class CommandInterpreter {
         this.chatManager = chatManager;
     }
 
-    public String executeCommand(User user, String command) {
+    public String executeCommand(String uuid, String command) {
         String commandName, rest;
         String[] parts = command.split(" ", 2);
         commandName = parts[0].trim();
-        rest = parts[1].trim();
+        if (parts.length > 1)
+            rest = parts[1].trim();
+        else
+            rest = "";
+
+        User user = this.chatManager.findUserByUuid(uuid);
 
         if (commandName.equalsIgnoreCase("channel"))
             return this.channel(user, rest);
@@ -24,7 +31,10 @@ public class CommandInterpreter {
         String subCommand, rest;
         String[] parts = args.split(" ", 2);
         subCommand = parts[0].trim();
-        rest = parts[1].trim();
+        if (parts.length > 1)
+            rest = parts[1].trim();
+        else
+            rest = "";
         if (subCommand.equalsIgnoreCase("connect")) {
             Channel channel = this.chatManager.connectToChannel(user, rest);
             if (channel != null)
@@ -36,6 +46,14 @@ public class CommandInterpreter {
             Channel channel = this.chatManager.createChannel(user);
             return "channel created " + channel.getUuid();
         }
+        else if (subCommand.equalsIgnoreCase("list")) {
+            ArrayList<Channel> channels = this.chatManager.getChannels();
+            String result = "channel listed";
+            for (Channel channel : channels) {
+                result += "\n" + channel.getUuid() + " " + channel.getName() + " " + channel.getUsersConnected().size();
+            }
+            return result.trim();
+        }
         else
             return "error Unknown subcommand";
     }
@@ -44,7 +62,10 @@ public class CommandInterpreter {
         String subCommand, rest;
         String[] parts = args.split(" ", 2);
         subCommand = parts[0].trim();
-        rest = parts[1].trim();
+        if (parts.length > 1)
+            rest = parts[1].trim();
+        else
+            rest = "";
         if (subCommand.equalsIgnoreCase("create")) {
             parts = rest.split(" ", 2);
             String channelUuid = parts[0];

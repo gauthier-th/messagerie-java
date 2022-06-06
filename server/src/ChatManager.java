@@ -54,7 +54,11 @@ public class ChatManager {
         return message;
     }
 
-    private User findUserByUuid(String uuid) {
+    public ArrayList<Channel> getChannels() {
+        return this.channels;
+    }
+
+    public User findUserByUuid(String uuid) {
         for (User user : this.getUsers()) {
             if (user.getUuid().equalsIgnoreCase(uuid))
                 return user;
@@ -62,7 +66,7 @@ public class ChatManager {
         return null;
     }
 
-    private Channel findChannelByUuid(String uuid) {
+    public Channel findChannelByUuid(String uuid) {
         Channel channel = null;
         for (Channel chan : this.channels) {
             if (chan.getUuid().equalsIgnoreCase(uuid)) {
@@ -79,7 +83,7 @@ public class ChatManager {
         return channel;
     }
 
-    private Channel findUserChannel(User user) {
+    public Channel findUserChannel(User user) {
         Channel channel = null;
         for (Channel chan : this.channels) {
             if (chan.getUsersConnected().contains(user)) {
