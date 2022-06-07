@@ -26,6 +26,11 @@ public class ChannelsCommandInterpreter implements CommandInterpreter {
         SocketManager.getInstance().sendMessage("channel list");
     }
 
+    public void createChannel(String name) {
+        SocketManager.getInstance().sendMessage("channel create " + name);
+        this.reloadChannels();
+    }
+
     private void channel(String args) {
         String subCommand, rest;
         String[] parts = args.split(" ", 2);
@@ -48,6 +53,9 @@ public class ChannelsCommandInterpreter implements CommandInterpreter {
                 }
             }
             this.channelsWindow.updateChannels(channels);
+        }
+        else if (subCommand.equalsIgnoreCase("created")) {
+            this.channelsWindow.joinChannel(rest);
         }
     }
 

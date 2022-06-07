@@ -44,15 +44,17 @@ public class CommandInterpreter {
         }
         else if (subCommand.equalsIgnoreCase("create")) {
             Channel channel = this.chatManager.createChannel(user);
+            if (rest.length() > 0)
+                channel.setName(rest);
             return "channel created " + channel.getUuid();
         }
         else if (subCommand.equalsIgnoreCase("list")) {
             ArrayList<Channel> channels = this.chatManager.getChannels();
-            String result = "channel listed";
+            String result = "";
             for (Channel channel : channels) {
                 result += "\n" + channel.getUuid() + " " + channel.getName() + " " + channel.getUsersConnected().size();
             }
-            return result.trim();
+            return ("channel listed " + result.trim()).trim();
         }
         else
             return "error Unknown subcommand";

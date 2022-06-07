@@ -28,7 +28,7 @@ public class MainWindow {
 
                             JFrame frame = new JFrame("Messagerie Java - Salons");
                             frame.setContentPane(new ChannelsWindow().getRoot());
-                            frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
                             frame.pack();
                             frame.setLocationRelativeTo(null);
                             frame.setVisible(true);

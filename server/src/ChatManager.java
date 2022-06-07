@@ -30,8 +30,11 @@ public class ChatManager {
     public void userDisconnect(String uuid) {
         User user = findUserByUuid(uuid);
         Channel channel = findUserChannel(user);
-        if (channel != null)
+        if (channel != null) {
             channel.userDisconnect(user);
+            if (channel.getUsersConnected().size() == 0)
+                channels.remove(channel);
+        }
     }
 
     public Channel createChannel(User user) {

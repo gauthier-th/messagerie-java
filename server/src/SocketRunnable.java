@@ -29,7 +29,7 @@ public class SocketRunnable implements Runnable {
     public void sendMessage(String message) {
         try {
             this.outputStream.flush();
-            this.outputStream.write(message.getBytes());
+            this.outputStream.write(message.replace("\n", "\f").getBytes());
             this.outputStream.write('\n');
         }
         catch (Exception e) {}
@@ -66,7 +66,7 @@ public class SocketRunnable implements Runnable {
                     socket.close();
                 }
                 else {
-                    this.readMessage(line);
+                    this.readMessage(line.replace("\f", "\n"));
                 }
             }
             catch (SocketException e) {
