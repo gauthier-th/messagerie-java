@@ -45,8 +45,10 @@ public class ChatManager {
         return channel;
     }
 
-    public Message sendMessage(User user, String channelUuid, String content) {
-        Channel channel = findChannelByUuid(channelUuid);
+    public Message sendMessage(User user, String content) {
+        Channel channel = findUserChannel(user);
+        if (channel == null)
+            return null;
         Message message = new Message(user, content, channel);
         channel.addMessage(message);
 

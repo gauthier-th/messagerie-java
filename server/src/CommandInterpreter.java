@@ -47,7 +47,7 @@ public class CommandInterpreter {
             if (channel != null)
                 return "channel disconnected " + channel.getUuid();
             else
-                return "error Not connected";
+                return "error Not connected to channel";
         }
         else if (subCommand.equalsIgnoreCase("get")) {
             Channel channel = this.chatManager.findChannelByUuid(rest);
@@ -70,6 +70,17 @@ public class CommandInterpreter {
             }
             return ("channel listed " + result.trim()).trim();
         }
+        else if (subCommand.equalsIgnoreCase("users")) {
+            Channel channel = this.chatManager.findChannelByUuid(rest);
+            if (channel == null)
+                return "error Not connected to channel";
+            ArrayList<User> users = channel.getUsersConnected();
+            String result = "";
+            for (User usr : users) {
+                result += "\n" + usr.getUuid() + " " + usr.getName() + " " + usr.getLoggingDate().getTime();
+            }
+            return ("channel userlist " + result.trim()).trim();
+        }
         else
             return "error Unknown subcommand";
     }
@@ -83,11 +94,11 @@ public class CommandInterpreter {
         else
             rest = "";
         if (subCommand.equalsIgnoreCase("create")) {
-            parts = rest.split(" ", 2);
-            String channelUuid = parts[0];
-            String content = parts[1];
-            Message message = this.chatManager.sendMessage(user, channelUuid, content);
-            return messageToCommand(message);
+            Message message = this.chatManager.sendMessage(user, rest);
+            if (message != null)
+                return messageToCommand(message);
+            else
+                return "error Not connected to channel";
         }
         else
             return "error Unknown subcommand";

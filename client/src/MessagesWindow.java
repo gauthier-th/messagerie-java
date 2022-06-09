@@ -11,6 +11,7 @@ public class MessagesWindow {
         return this.root;
     }
     public String getUuid() { return this.uuid; }
+    public Channel getChannel() { return this.channel; }
 
     MessagesWindow(String uuid) {
         this.uuid = uuid;
@@ -29,6 +30,14 @@ public class MessagesWindow {
 
     public void quitChannel() {
         this.commandInterpreter.quitChannel();
+    }
+
+    public void updateUsers() {
+
+    }
+
+    public void newMessage(Message message) {
+
     }
 
 }
