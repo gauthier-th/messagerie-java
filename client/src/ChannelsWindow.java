@@ -19,6 +19,7 @@ public class ChannelsWindow {
         this.commandInterpreter = new ChannelsCommandInterpreter(this);
         SocketManager.getInstance().setCommandInterpreter(this.commandInterpreter);
         this.commandInterpreter.reloadChannels();
+
         this.channelsPanel.setLayout(new BoxLayout(this.channelsPanel, BoxLayout.Y_AXIS));
         createChannel.addActionListener(new ActionListener() {
             @Override
@@ -59,7 +60,26 @@ public class ChannelsWindow {
     }
 
     public void joinChannel(String uuid) {
-        System.out.println("Join channel " + uuid);
+        JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
+        channelsWindowFrame.setVisible(false);
+
+        JFrame frame = new JFrame("Chargement...");
+        MessagesWindow messagesWindow = new MessagesWindow(uuid);
+        frame.setContentPane(messagesWindow.getRoot());
+        frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+        frame.pack();
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);
+        frame.addWindowListener(new java.awt.event.WindowAdapter() {
+            @Override
+            public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(ChannelsWindow.this.root);
+                channelsWindowFrame.setVisible(true);
+                SocketManager.getInstance().setCommandInterpreter(ChannelsWindow.this.commandInterpreter);
+                messagesWindow.quitChannel();
+                ChannelsWindow.this.commandInterpreter.reloadChannels();
+            }
+        });
     }
 
 }

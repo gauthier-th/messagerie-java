@@ -42,6 +42,20 @@ public class CommandInterpreter {
             else
                 return "error Unknown channel";
         }
+        else if (subCommand.equalsIgnoreCase("disconnect")) {
+            Channel channel = this.chatManager.userDisconnect(user.getUuid());
+            if (channel != null)
+                return "channel disconnected " + channel.getUuid();
+            else
+                return "error Not connected";
+        }
+        else if (subCommand.equalsIgnoreCase("get")) {
+            Channel channel = this.chatManager.findChannelByUuid(rest);
+            if (channel != null)
+                return "channel infos " + channel.getUuid() + " " + channel.getName() + " " + channel.getUsersConnected().size();
+            else
+                return "error Unknown channel";
+        }
         else if (subCommand.equalsIgnoreCase("create")) {
             Channel channel = this.chatManager.createChannel(user);
             if (rest.length() > 0)

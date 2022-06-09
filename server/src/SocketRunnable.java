@@ -27,6 +27,8 @@ public class SocketRunnable implements Runnable {
     }
 
     public void sendMessage(String message) {
+        if (message == null || message.length() == 0)
+            return;
         try {
             this.outputStream.flush();
             this.outputStream.write(message.replace("\n", "\f").getBytes());

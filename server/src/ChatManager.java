@@ -27,7 +27,7 @@ public class ChatManager {
         return channel;
     }
 
-    public void userDisconnect(String uuid) {
+    public Channel userDisconnect(String uuid) {
         User user = findUserByUuid(uuid);
         Channel channel = findUserChannel(user);
         if (channel != null) {
@@ -35,6 +35,7 @@ public class ChatManager {
             if (channel.getUsersConnected().size() == 0)
                 channels.remove(channel);
         }
+        return channel;
     }
 
     public Channel createChannel(User user) {
