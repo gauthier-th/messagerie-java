@@ -63,7 +63,7 @@ public class ChannelsWindow {
         JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
         channelsWindowFrame.setVisible(false);
 
-        JFrame frame = new JFrame("Chargement...");
+        JFrame frame = new JFrame("Messagerie Java - Discussion");
         MessagesWindow messagesWindow = new MessagesWindow(uuid);
         frame.setContentPane(messagesWindow.getRoot());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);

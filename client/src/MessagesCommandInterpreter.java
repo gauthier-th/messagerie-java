@@ -1,5 +1,4 @@
 import java.sql.Date;
-import java.util.ArrayList;
 
 public class MessagesCommandInterpreter implements CommandInterpreter {
 
@@ -27,11 +26,15 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
     }
 
     public void reloadChannel() {
-        SocketManager.getInstance().sendMessage("channel get " + this.messagesWindow.getUuid());
+        SocketManager.getInstance().sendMessage("channel get " + this.messagesWindow.getChannelUuid());
     }
 
     public void quitChannel() {
-        SocketManager.getInstance().sendMessage("channel disconnect " + this.messagesWindow.getUuid());
+        SocketManager.getInstance().sendMessage("channel disconnect " + this.messagesWindow.getChannelUuid());
+    }
+
+    public void reloadUsers() {
+        SocketManager.getInstance().sendMessage("channel users " + this.messagesWindow.getChannelUuid());
     }
 
     public void sendMessage(String message) {
@@ -54,6 +57,22 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
             channel.setUsersConnectedCount(Integer.parseInt(items[2]));
             this.messagesWindow.updateChannel(channel);
         }
+        else if (subCommand.equalsIgnoreCase("userlist")) {
+            String[] userTexts = rest.split("\n");
+            Channel channel = this.messagesWindow.getChannel();
+            if (rest.length() > 0) {
+                channel.getUsersConnected().clear();
+                for (String userText : userTexts) {
+                    String[] items = userText.split(" ", 3);
+                    User user = new User(items[0]);
+                    user.setLoggingDate(new Date(Long.parseLong(items[1])));
+                    if (!items[2].equalsIgnoreCase("null"))
+                        user.setName(items[2].trim());
+                    channel.userConnect(user);
+                }
+            }
+            this.messagesWindow.updateUsers();
+        }
     }
 
     public void message(String args) {
@@ -72,22 +91,6 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
             User user = channel.getUsersConnected().stream().filter(usr -> usr.getUuid().equalsIgnoreCase(userUuid)).findFirst().get();
             Message message = new Message(user, content, channel);
             this.messagesWindow.newMessage(message);
-        }
-        else if (subCommand.equalsIgnoreCase("userlist")) {
-            String[] channelTexts = rest.split("\n");
-            Channel channel = this.messagesWindow.getChannel();
-            if (rest.length() > 0) {
-                channel.getUsersConnected().clear();
-                for (String channelText : channelTexts) {
-                    String[] items = channelText.split(" ");
-                    User user = new User(items[0]);
-                    if (!items[1].equalsIgnoreCase("null"))
-                        user.setName(items[1]);
-                    user.setLoggingDate(new Date(Long.parseLong(items[2])));
-                    channel.userConnect(user);
-                }
-            }
-            this.messagesWindow.updateUsers();
         }
     }
 

@@ -77,7 +77,7 @@ public class CommandInterpreter {
             ArrayList<User> users = channel.getUsersConnected();
             String result = "";
             for (User usr : users) {
-                result += "\n" + usr.getUuid() + " " + usr.getName() + " " + usr.getLoggingDate().getTime();
+                result += "\n" + usr.getUuid() + " " + usr.getLoggingDate().getTime() + " " + usr.getName();
             }
             return ("channel userlist " + result.trim()).trim();
         }
