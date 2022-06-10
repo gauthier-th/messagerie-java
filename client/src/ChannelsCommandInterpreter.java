@@ -30,6 +30,9 @@ public class ChannelsCommandInterpreter implements CommandInterpreter {
         SocketManager.getInstance().sendMessage("channel create " + name);
         this.reloadChannels();
     }
+    public void joinChannel(String channelUuid) {
+        SocketManager.getInstance().sendMessage("channel connect " + channelUuid);
+    }
 
     private void channel(String args) {
         String subCommand, rest;
@@ -44,11 +47,11 @@ public class ChannelsCommandInterpreter implements CommandInterpreter {
             ArrayList<Channel> channels = new ArrayList<>();
             if (rest.length() > 0) {
                 for (String channelText : channelTexts) {
-                    String[] items = channelText.split(" ");
+                    String[] items = channelText.split(" ", 3);
                     Channel channel = new Channel(items[0]);
-                    if (!items[1].equalsIgnoreCase("null"))
-                        channel.setName(items[1]);
-                    channel.setUsersConnectedCount(Integer.parseInt(items[2]));
+                    channel.setUsersConnectedCount(Integer.parseInt(items[1]));
+                    if (!items[2].equalsIgnoreCase("null"))
+                        channel.setName(items[2]);
                     channels.add(channel);
                 }
             }

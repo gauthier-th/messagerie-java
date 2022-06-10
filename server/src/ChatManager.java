@@ -24,6 +24,13 @@ public class ChatManager {
         Channel channel = findChannelByUuid(channelUUID);
         if (channel != null)
             channel.userConnect(user);
+
+        String command = CommandInterpreter.userJoinToCommand(user);
+        for (User usr : channel.getUsersConnected()) {
+            if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
+                usr.getSocketRunnable().sendMessage(command);
+        }
+
         return channel;
     }
 
@@ -34,14 +41,20 @@ public class ChatManager {
             channel.userDisconnect(user);
             if (channel.getUsersConnected().size() == 0)
                 channels.remove(channel);
+
+            String command = CommandInterpreter.userLeaveToCommand(user);
+            for (User usr : channel.getUsersConnected()) {
+                if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
+                    usr.getSocketRunnable().sendMessage(command);
+            }
         }
+
         return channel;
     }
 
     public Channel createChannel(User user) {
         Channel channel = new Channel(Utils.getUUID());
         this.channels.add(channel);
-        channel.userConnect(user);
         return channel;
     }
 

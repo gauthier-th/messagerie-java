@@ -52,7 +52,7 @@ public class CommandInterpreter {
         else if (subCommand.equalsIgnoreCase("get")) {
             Channel channel = this.chatManager.findChannelByUuid(rest);
             if (channel != null)
-                return "channel infos " + channel.getUuid() + " " + channel.getName() + " " + channel.getUsersConnected().size();
+                return "channel infos " + channel.getUuid() + " " + channel.getUsersConnected().size() + " " + channel.getName();
             else
                 return "error Unknown channel";
         }
@@ -66,7 +66,7 @@ public class CommandInterpreter {
             ArrayList<Channel> channels = this.chatManager.getChannels();
             String result = "";
             for (Channel channel : channels) {
-                result += "\n" + channel.getUuid() + " " + channel.getName() + " " + channel.getUsersConnected().size();
+                result += "\n" + channel.getUuid() + " " + channel.getUsersConnected().size() + " " + channel.getName();
             }
             return ("channel listed " + result.trim()).trim();
         }
@@ -104,6 +104,12 @@ public class CommandInterpreter {
             return "error Unknown subcommand";
     }
 
+    public static String userJoinToCommand(User user) {
+        return "channel join " + user.getUuid() + " " + user.getLoggingDate().getTime() + " " + user.getName();
+    }
+    public static String userLeaveToCommand(User user) {
+        return "channel leave " + user.getUuid();
+    }
     public static String messageToCommand(Message message) {
         return "message created " + message.getAuthor().getUuid() + " " + message.getContent();
     }

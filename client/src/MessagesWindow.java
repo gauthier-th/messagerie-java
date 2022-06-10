@@ -23,26 +23,42 @@ public class MessagesWindow {
         this.commandInterpreter = new MessagesCommandInterpreter(this);
         SocketManager.getInstance().setCommandInterpreter(this.commandInterpreter);
         this.commandInterpreter.reloadChannel();
+
+        this.messagesPanel.setLayout(new BoxLayout(this.messagesPanel, BoxLayout.Y_AXIS));
     }
 
     public void updateChannel(Channel channel) {
         this.channel = channel;
         titleLabel.setText("Salon " + channel.getDisplayName());
         this.commandInterpreter.reloadUsers();
+        this.addLabel("<html><font color='#888'>[info] Connexion au salon réussie.</font></html>");
     }
 
     public void quitChannel() {
-        this.commandInterpreter.quitChannel();
+        this.commandInterpreter.leaveChannel();
     }
 
     public void updateUsers() {
-        for (User user : channel.getUsersConnected()) {
-            System.out.println(user.getDisplayName());
-        }
+        if (channel.getUsersConnected().size() <= 1)
+            this.addLabel("<html><font color='#888'>[info] 1 utilisateur dans le salon.</font></html>");
+        else
+            this.addLabel("<html><font color='#888'>[info] " + channel.getUsersConnected().size() + " utilisateurs dans le salon.</font></html>");
+    }
+
+    public void userJoin(User user) {
+        this.addLabel("<html><font color='#00b02c'>[" + user.getDisplayName() + "] a rejoint le salon.</font></html>");
+    }
+    public void userLeave(User user) {
+        this.addLabel("<html><font color='#ff1f1f'>[" + user.getDisplayName() + "] a quitté le salon.</font></html>");
     }
 
     public void newMessage(Message message) {
 
+    }
+
+    private void addLabel(String text) {
+        JLabel label = new JLabel(text);
+        messagesPanel.add(label);
     }
 
 }

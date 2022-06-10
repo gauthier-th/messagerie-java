@@ -59,12 +59,14 @@ public class ChannelsWindow {
         this.channelsPanel.repaint();
     }
 
-    public void joinChannel(String uuid) {
+    public void joinChannel(String channelUuid) {
+        ChannelsWindow.this.commandInterpreter.joinChannel(channelUuid);
+
         JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
         channelsWindowFrame.setVisible(false);
 
         JFrame frame = new JFrame("Messagerie Java - Discussion");
-        MessagesWindow messagesWindow = new MessagesWindow(uuid);
+        MessagesWindow messagesWindow = new MessagesWindow(channelUuid);
         frame.setContentPane(messagesWindow.getRoot());
         frame.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         frame.pack();

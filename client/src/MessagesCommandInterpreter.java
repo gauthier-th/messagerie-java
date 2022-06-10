@@ -29,7 +29,7 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
         SocketManager.getInstance().sendMessage("channel get " + this.messagesWindow.getChannelUuid());
     }
 
-    public void quitChannel() {
+    public void leaveChannel() {
         SocketManager.getInstance().sendMessage("channel disconnect " + this.messagesWindow.getChannelUuid());
     }
 
@@ -50,11 +50,11 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
         else
             rest = "";
         if (subCommand.equalsIgnoreCase("infos")) {
-            String[] items = rest.split(" ");
+            String[] items = rest.split(" ", 3);
             Channel channel = new Channel(items[0]);
-            if (!items[1].equalsIgnoreCase("null"))
-                channel.setName(items[1]);
-            channel.setUsersConnectedCount(Integer.parseInt(items[2]));
+            channel.setUsersConnectedCount(Integer.parseInt(items[1]));
+            if (!items[2].equalsIgnoreCase("null"))
+                channel.setName(items[2]);
             this.messagesWindow.updateChannel(channel);
         }
         else if (subCommand.equalsIgnoreCase("userlist")) {
@@ -70,8 +70,26 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
                         user.setName(items[2].trim());
                     channel.userConnect(user);
                 }
+                channel.setUsersConnectedCount(channel.getUsersConnected().size());
             }
             this.messagesWindow.updateUsers();
+        }
+        else if (subCommand.equalsIgnoreCase("join")) {
+            String[] items = rest.split(" ", 3);
+            User user = new User(items[0]);
+            user.setLoggingDate(new Date(Long.parseLong(items[1])));
+            if (!items[2].equalsIgnoreCase("null"))
+                user.setName(items[2].trim());
+            Channel channel = this.messagesWindow.getChannel();
+            channel.userConnect(user);
+            this.messagesWindow.userJoin(user);
+        }
+        else if (subCommand.equalsIgnoreCase("leave")) {
+            Channel channel = this.messagesWindow.getChannel();
+            String userUuid = rest;
+            User user = channel.getUsersConnected().stream().filter(usr -> usr.getUuid().equalsIgnoreCase(userUuid)).findFirst().get();
+            channel.userDisconnect(user);
+            this.messagesWindow.userLeave(user);
         }
     }
 
