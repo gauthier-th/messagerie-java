@@ -84,7 +84,8 @@ public class ChatManager {
 
         String command = CommandInterpreter.messageToCommand(message);
         for (User usr : channel.getUsersConnected()) {
-            usr.getSocketRunnable().sendMessage(command);
+            if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
+                usr.getSocketRunnable().sendMessage(command);
         }
 
         return message;

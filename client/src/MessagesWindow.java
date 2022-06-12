@@ -5,7 +5,8 @@ public class MessagesWindow {
     private JTextField textField;
     private JLabel titleLabel;
     private JButton sendButton;
-    private JPanel messagesPanel;
+    private JPanel messagesPane;
+    private JScrollPane scrollPane;
 
     private String channelUuid;
     private MessagesCommandInterpreter commandInterpreter;
@@ -24,7 +25,14 @@ public class MessagesWindow {
         SocketManager.getInstance().setCommandInterpreter(this.commandInterpreter);
         this.commandInterpreter.reloadChannel();
 
-        this.messagesPanel.setLayout(new BoxLayout(this.messagesPanel, BoxLayout.Y_AXIS));
+        this.messagesPane.setLayout(new BoxLayout(this.messagesPane, BoxLayout.Y_AXIS));
+
+        sendButton.addActionListener(e -> {
+            String message = textField.getText();
+            if (message.length() > 0)
+                this.commandInterpreter.sendMessage(message);
+            textField.setText("");
+        });
     }
 
     public void updateChannel(Channel channel) {
@@ -46,19 +54,22 @@ public class MessagesWindow {
     }
 
     public void userJoin(User user) {
-        this.addLabel("<html><font color='#00b02c'>[" + user.getDisplayName() + "] a rejoint le salon.</font></html>");
+        this.addLabel("<html><font color='#" + user.getHexColor() + "'>[" + user.getDisplayName() + "] <font color='#00b02c'>a rejoint le salon.</font></html>");
     }
     public void userLeave(User user) {
-        this.addLabel("<html><font color='#ff1f1f'>[" + user.getDisplayName() + "] a quitté le salon.</font></html>");
+        this.addLabel("<html><font color='#" + user.getHexColor() + "'>[" + user.getDisplayName() + "] <font color='#ff1f1f'>a quitté le salon.</font></html>");
     }
 
     public void newMessage(Message message) {
-
+        this.addLabel("<html><font color='#" + message.getAuthor().getHexColor() + "'>[" + message.getAuthor().getDisplayName() + "]</font> " + message.getContent() + "</html>");
     }
 
     private void addLabel(String text) {
         JLabel label = new JLabel(text);
-        messagesPanel.add(label);
+        scrollPane.getVerticalScrollBar().setValue(scrollPane.getVerticalScrollBar().getMaximum());
+        this.messagesPane.add(label);
+        this.messagesPane.revalidate();
+        this.messagesPane.repaint();
     }
 
 }
