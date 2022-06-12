@@ -25,10 +25,15 @@ public class ChatManager {
         if (channel != null)
             channel.userConnect(user);
 
-        String command = CommandInterpreter.userJoinToCommand(user);
+        String commandJoinChannel = CommandInterpreter.userJoinToCommand(user);
         for (User usr : channel.getUsersConnected()) {
             if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
-                usr.getSocketRunnable().sendMessage(command);
+                usr.getSocketRunnable().sendMessage(commandJoinChannel);
+        }
+        String commandListChannel = CommandInterpreter.channelListedToCommand(this.channels);
+        for (User usr : this.users) {
+            if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
+                usr.getSocketRunnable().sendMessage(commandListChannel);
         }
 
         return channel;
@@ -42,10 +47,15 @@ public class ChatManager {
             if (channel.getUsersConnected().size() == 0)
                 channels.remove(channel);
 
-            String command = CommandInterpreter.userLeaveToCommand(user);
+            String commandLeaveChannel = CommandInterpreter.userLeaveToCommand(user);
             for (User usr : channel.getUsersConnected()) {
                 if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
-                    usr.getSocketRunnable().sendMessage(command);
+                    usr.getSocketRunnable().sendMessage(commandLeaveChannel);
+            }
+            String commandListChannel = CommandInterpreter.channelListedToCommand(this.channels);
+            for (User usr : this.users) {
+                if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
+                    usr.getSocketRunnable().sendMessage(commandListChannel);
             }
         }
 
@@ -55,6 +65,13 @@ public class ChatManager {
     public Channel createChannel(User user) {
         Channel channel = new Channel(Utils.getUUID());
         this.channels.add(channel);
+
+        String command = CommandInterpreter.channelListedToCommand(this.channels);
+        for (User usr : this.users) {
+            if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
+                usr.getSocketRunnable().sendMessage(command);
+        }
+
         return channel;
     }
 

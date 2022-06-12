@@ -32,6 +32,7 @@ public class ChannelsWindow {
     }
 
     public void updateChannels(ArrayList<Channel> channels) {
+        System.out.println("update channels: " + channels.size());
         this.channelsPanel.removeAll();
         if (channels.size() > 0) {
             for (Channel channel : channels) {

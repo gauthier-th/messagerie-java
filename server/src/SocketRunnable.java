@@ -30,6 +30,8 @@ public class SocketRunnable implements Runnable {
         if (message == null || message.length() == 0)
             return;
         try {
+            System.out.println("Send to client:");
+            System.out.println(message);
             this.outputStream.flush();
             this.outputStream.write(message.replace("\n", "\f").getBytes());
             this.outputStream.write('\n');
@@ -41,8 +43,6 @@ public class SocketRunnable implements Runnable {
         System.out.println("Message received from client:");
         System.out.println(message);
         String result = this.socketManager.getCommandInterpreter().executeCommand(this.uuid, message);
-        System.out.println("Result:");
-        System.out.println(result);
         this.sendMessage(result);
     }
 

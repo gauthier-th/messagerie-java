@@ -63,12 +63,7 @@ public class CommandInterpreter {
             return "channel created " + channel.getUuid();
         }
         else if (subCommand.equalsIgnoreCase("list")) {
-            ArrayList<Channel> channels = this.chatManager.getChannels();
-            String result = "";
-            for (Channel channel : channels) {
-                result += "\n" + channel.getUuid() + " " + channel.getUsersConnected().size() + " " + channel.getName();
-            }
-            return ("channel listed " + result.trim()).trim();
+            return channelListedToCommand(this.chatManager.getChannels());
         }
         else if (subCommand.equalsIgnoreCase("users")) {
             Channel channel = this.chatManager.findChannelByUuid(rest);
@@ -112,6 +107,13 @@ public class CommandInterpreter {
     }
     public static String messageToCommand(Message message) {
         return "message created " + message.getAuthor().getUuid() + " " + message.getContent();
+    }
+    public static String channelListedToCommand(ArrayList<Channel> channels)  {
+        String result = "";
+        for (Channel channel : channels) {
+            result += "\n" + channel.getUuid() + " " + channel.getUsersConnected().size() + " " + channel.getName();
+        }
+        return ("channel listed " + result.trim()).trim();
     }
 
 }
