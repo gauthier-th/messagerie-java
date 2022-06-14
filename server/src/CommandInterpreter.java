@@ -23,6 +23,8 @@ public class CommandInterpreter {
             return this.channel(user, rest);
         else if (commandName.equalsIgnoreCase("message"))
             return this.message(user, rest);
+        else if (commandName.equalsIgnoreCase("username"))
+            return this.username(user, rest);
         else
             return "error Unknown command";
     }
@@ -97,6 +99,12 @@ public class CommandInterpreter {
         }
         else
             return "error Unknown subcommand";
+    }
+
+    private String username(User user, String args) {
+        if (args.length() > 0)
+            user.setName(args);
+        return "";
     }
 
     public static String userJoinToCommand(User user) {

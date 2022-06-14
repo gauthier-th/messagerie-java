@@ -1,4 +1,6 @@
 import javax.swing.*;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 
 public class MessagesWindow {
     private JPanel root;
@@ -32,6 +34,18 @@ public class MessagesWindow {
             if (message.length() > 0)
                 this.commandInterpreter.sendMessage(message);
             textField.setText("");
+        });
+        textField.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyPressed(KeyEvent e) {
+                super.keyPressed(e);
+                if (e.getKeyCode() == 10) {
+                    String message = textField.getText();
+                    if (message.length() > 0)
+                        MessagesWindow.this.commandInterpreter.sendMessage(message);
+                    textField.setText("");
+                }
+            }
         });
     }
 

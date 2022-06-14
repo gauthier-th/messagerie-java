@@ -7,6 +7,7 @@ public class SocketManager implements Runnable {
 
     String address;
     int port;
+    String username = null;
     Socket socket;
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
@@ -17,16 +18,18 @@ public class SocketManager implements Runnable {
     private static SocketManager socketManager = null;
     private static Thread socketManagerThread = null;
 
-    SocketManager(String address, int port) {
+    SocketManager(String address, int port, String username) {
         this.address = address;
         this.port = port;
+        if (username != null && username.length() > 0)
+            this.username = username;
     }
 
     public static SocketManager getInstance() {
         return socketManager;
     }
-    public static void startManager(String address, int port) {
-        socketManager = new SocketManager(address, port);
+    public static void startManager(String address, int port, String username) {
+        socketManager = new SocketManager(address, port, username);
         socketManagerThread = new Thread(socketManager);
         socketManagerThread.start();
     }
@@ -87,6 +90,8 @@ public class SocketManager implements Runnable {
             InputStream inputStream = this.socket.getInputStream();
             this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             this.outputStream = new DataOutputStream(socket.getOutputStream());
+            if (username != null)
+                this.sendMessage("username " + username);
             System.out.println("Connected!");
             if (this.connectedCallback != null) {
                 this.connectedCallback.run();

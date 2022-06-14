@@ -63,6 +63,7 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
             if (rest.length() > 0) {
                 channel.getUsersConnected().clear();
                 for (String userText : userTexts) {
+                    System.out.println(userText);
                     String[] items = userText.split(" ", 3);
                     User user = new User(items[0]);
                     user.setLoggingDate(new Date(Long.parseLong(items[1])));
