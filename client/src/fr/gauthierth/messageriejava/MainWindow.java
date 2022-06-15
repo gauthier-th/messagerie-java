@@ -13,8 +13,13 @@ public class MainWindow {
     private JTextField textFieldPort;
     private JTextField textFieldUsername;
     private JButton buttonConnect;
+    private ConfigSaver configSaver = new ConfigSaver("config.txt");
 
     public MainWindow() {
+        configSaver.load();
+        textFieldAddress.setText(configSaver.getHost());
+        textFieldPort.setText(String.valueOf(configSaver.getPort()));
+        textFieldUsername.setText(configSaver.getUsername());
 
         buttonConnect.addActionListener(new ActionListener() {
             @Override
@@ -38,6 +43,12 @@ public class MainWindow {
             String portText = textFieldPort.getText();
             String username = textFieldUsername.getText();
             int port = Integer.parseInt(portText, 10);
+
+            configSaver.setHost(address);
+            configSaver.setPort(port);
+            configSaver.setUsername(username);
+            configSaver.save();
+
             if (address.length() > 0 && port > 0) {
                 SocketManager.startManager(address, port, username);
                 SocketManager.getInstance().setConnectedCallback(() -> {
