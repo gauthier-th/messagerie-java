@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 public class Message {
 
     private User author;

@@ -1,4 +1,4 @@
-import jdk.swing.interop.SwingInterOpUtils;
+package fr.gauthierth.messageriejava;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

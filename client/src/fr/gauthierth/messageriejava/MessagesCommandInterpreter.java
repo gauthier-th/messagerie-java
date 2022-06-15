@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 import java.sql.Date;
 
 public class MessagesCommandInterpreter implements CommandInterpreter {

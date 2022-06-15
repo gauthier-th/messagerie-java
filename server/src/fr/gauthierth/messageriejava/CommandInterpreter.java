@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 import java.util.ArrayList;
 
 public class CommandInterpreter {

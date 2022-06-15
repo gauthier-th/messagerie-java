@@ -1,4 +1,4 @@
-import java.util.Scanner;
+package fr.gauthierth.messageriejava;
 
 public class main {
 

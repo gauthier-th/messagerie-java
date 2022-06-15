@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 import java.util.Date;
 
 public class User extends Channel {

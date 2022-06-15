@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -40,7 +42,7 @@ public class SocketRunnable implements Runnable {
     }
 
     private void readMessage(String message) {
-        System.out.println("Message received from client:");
+        System.out.println("fr.gauthierth.messageriejava.Message received from client:");
         System.out.println(message);
         String result = this.socketManager.getCommandInterpreter().executeCommand(this.uuid, message);
         this.sendMessage(result);

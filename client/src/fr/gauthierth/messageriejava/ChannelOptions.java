@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 public class ChannelOptions {
 
     private String name = null;

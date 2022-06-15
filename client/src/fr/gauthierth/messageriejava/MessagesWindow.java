@@ -1,3 +1,5 @@
+package fr.gauthierth.messageriejava;
+
 import javax.swing.*;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
