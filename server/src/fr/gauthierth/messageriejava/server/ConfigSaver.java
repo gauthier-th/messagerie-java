@@ -1,5 +1,7 @@
 package fr.gauthierth.messageriejava.server;
 
+import fr.gauthierth.messageriejava.server.objects.Channel;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.PrintWriter;
@@ -9,7 +11,7 @@ public class ConfigSaver {
 
     private String filename;
 
-    ConfigSaver(String filename) {
+    public ConfigSaver(String filename) {
         this.filename = filename;
     }
 

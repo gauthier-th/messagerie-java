@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.socket;
 
 public interface CommandInterpreter {
 

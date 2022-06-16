@@ -1,4 +1,8 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.ui;
+
+import fr.gauthierth.messageriejava.client.objects.Channel;
+import fr.gauthierth.messageriejava.client.socket.ChannelsCommandInterpreter;
+import fr.gauthierth.messageriejava.client.socket.SocketManager;
 
 import javax.swing.*;
 import java.awt.*;

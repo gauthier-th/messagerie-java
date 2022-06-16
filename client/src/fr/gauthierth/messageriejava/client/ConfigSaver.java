@@ -12,7 +12,7 @@ public class ConfigSaver {
     private int port = 3000;
     private String username = null;
 
-    ConfigSaver(String filename) {
+    public ConfigSaver(String filename) {
         this.filename = filename;
     }
 

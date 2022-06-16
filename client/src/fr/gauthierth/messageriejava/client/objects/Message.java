@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.objects;
 
 public class Message {
 
@@ -6,7 +6,7 @@ public class Message {
     private String content;
     private Channel channel;
 
-    Message(User author, String content, Channel channel) {
+    public Message(User author, String content, Channel channel) {
         this.author = author;
         this.content = content;
         this.channel = channel;

@@ -1,4 +1,10 @@
-package fr.gauthierth.messageriejava.server;
+package fr.gauthierth.messageriejava.server.socket;
+
+import fr.gauthierth.messageriejava.server.ConfigSaver;
+import fr.gauthierth.messageriejava.server.Utils;
+import fr.gauthierth.messageriejava.server.objects.Channel;
+import fr.gauthierth.messageriejava.server.objects.Message;
+import fr.gauthierth.messageriejava.server.objects.User;
 
 import java.util.ArrayList;
 
@@ -8,7 +14,7 @@ public class ChatManager {
     ArrayList<Channel> channels;
     ConfigSaver configSaver;
 
-    ChatManager() {
+    public ChatManager() {
         this.users = new ArrayList<>();
         this.configSaver = new ConfigSaver("config.txt");
         this.channels = this.configSaver.load();

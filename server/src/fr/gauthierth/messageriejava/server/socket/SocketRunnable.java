@@ -1,8 +1,7 @@
-package fr.gauthierth.messageriejava.server;
+package fr.gauthierth.messageriejava.server.socket;
 
 import java.io.*;
 import java.net.Socket;
-import java.net.SocketException;
 
 public class SocketRunnable implements Runnable {
 
@@ -12,7 +11,7 @@ public class SocketRunnable implements Runnable {
     BufferedReader bufferedReader;
     DataOutputStream outputStream;
 
-    SocketRunnable(Socket socket, SocketManager socketManager, String uuid) {
+    public SocketRunnable(Socket socket, SocketManager socketManager, String uuid) {
         this.socket = socket;
         this.socketManager = socketManager;
         this.uuid = uuid;

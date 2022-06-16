@@ -1,4 +1,7 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.socket;
+
+import fr.gauthierth.messageriejava.client.ui.ChannelsWindow;
+import fr.gauthierth.messageriejava.client.objects.Channel;
 
 import java.util.ArrayList;
 
@@ -6,7 +9,7 @@ public class ChannelsCommandInterpreter implements CommandInterpreter {
 
     ChannelsWindow channelsWindow;
 
-    ChannelsCommandInterpreter(ChannelsWindow channelsWindow) {
+    public ChannelsCommandInterpreter(ChannelsWindow channelsWindow) {
         this.channelsWindow = channelsWindow;
     }
 

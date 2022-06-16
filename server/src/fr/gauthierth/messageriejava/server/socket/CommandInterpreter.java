@@ -1,4 +1,8 @@
-package fr.gauthierth.messageriejava.server;
+package fr.gauthierth.messageriejava.server.socket;
+
+import fr.gauthierth.messageriejava.server.objects.Channel;
+import fr.gauthierth.messageriejava.server.objects.Message;
+import fr.gauthierth.messageriejava.server.objects.User;
 
 import java.util.ArrayList;
 
@@ -6,7 +10,7 @@ public class CommandInterpreter {
 
     ChatManager chatManager;
 
-    CommandInterpreter(ChatManager chatManager) {
+    public CommandInterpreter(ChatManager chatManager) {
         this.chatManager = chatManager;
     }
 

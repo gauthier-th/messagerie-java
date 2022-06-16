@@ -1,4 +1,6 @@
-package fr.gauthierth.messageriejava.server;
+package fr.gauthierth.messageriejava.server.socket;
+
+import fr.gauthierth.messageriejava.server.Utils;
 
 import java.io.IOException;
 import java.net.ServerSocket;
@@ -13,7 +15,7 @@ public class SocketManager implements Runnable {
     HashMap<String, Thread> threads;
     CommandInterpreter commandInterpreter;
 
-    SocketManager(int port, ChatManager chatManager ) {
+    public SocketManager(int port, ChatManager chatManager ) {
         this.port = port;
         this.chatManager = chatManager;
         this.runnables = new HashMap<>();

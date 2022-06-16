@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava.server;
+package fr.gauthierth.messageriejava.server.objects;
 
 import java.util.ArrayList;
 
@@ -11,7 +11,7 @@ public class Channel {
     private ArrayList<User> usersConnected;
     private ArrayList<Message> messages;
 
-    Channel(String uuid) {
+    public Channel(String uuid) {
         this.uuid = uuid;
         this.usersConnected = new ArrayList<>();
         this.messages = new ArrayList<>();

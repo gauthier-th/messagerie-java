@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.socket;
 
 import java.io.*;
 import java.net.Socket;
@@ -19,7 +19,7 @@ public class SocketManager implements Runnable {
     private static SocketManager socketManager = null;
     private static Thread socketManagerThread = null;
 
-    SocketManager(String address, int port, String username) {
+    public SocketManager(String address, int port, String username) {
         this.address = address;
         this.port = port;
         if (username != null && username.length() > 0)

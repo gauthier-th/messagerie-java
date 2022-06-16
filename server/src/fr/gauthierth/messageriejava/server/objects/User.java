@@ -1,4 +1,6 @@
-package fr.gauthierth.messageriejava.server;
+package fr.gauthierth.messageriejava.server.objects;
+
+import fr.gauthierth.messageriejava.server.socket.SocketRunnable;
 
 import java.util.Date;
 
@@ -7,7 +9,7 @@ public class User extends Channel {
     private Date loggingDate;
     private SocketRunnable socketRunnable;
 
-    User(String uuid, SocketRunnable socketRunnable) {
+    public User(String uuid, SocketRunnable socketRunnable) {
         super(uuid);
         this.name = "Anonymous " + this.uuid;
         this.loggingDate = new Date();

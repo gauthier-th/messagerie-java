@@ -1,4 +1,7 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.ui;
+
+import fr.gauthierth.messageriejava.client.ConfigSaver;
+import fr.gauthierth.messageriejava.client.socket.SocketManager;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;

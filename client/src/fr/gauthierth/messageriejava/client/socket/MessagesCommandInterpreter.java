@@ -1,4 +1,9 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.socket;
+
+import fr.gauthierth.messageriejava.client.ui.MessagesWindow;
+import fr.gauthierth.messageriejava.client.objects.Channel;
+import fr.gauthierth.messageriejava.client.objects.Message;
+import fr.gauthierth.messageriejava.client.objects.User;
 
 import java.sql.Date;
 
@@ -6,7 +11,7 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
 
     MessagesWindow messagesWindow;
 
-    MessagesCommandInterpreter(MessagesWindow messagesWindow) {
+    public MessagesCommandInterpreter(MessagesWindow messagesWindow) {
         this.messagesWindow = messagesWindow;
     }
 

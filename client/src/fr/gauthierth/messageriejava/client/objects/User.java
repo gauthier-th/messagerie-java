@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava.client;
+package fr.gauthierth.messageriejava.client.objects;
 
 import java.awt.*;
 import java.util.Date;
@@ -7,7 +7,7 @@ public class User extends Channel {
 
     private Date loggingDate;
 
-    User(String uuid) {
+    public User(String uuid) {
         super(uuid);
         this.name = "Anonymous " + this.uuid;
         this.loggingDate = new Date();
