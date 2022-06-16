@@ -2,12 +2,13 @@ package fr.gauthierth.messageriejava.client.objects;
 
 import java.util.ArrayList;
 
+/**
+ * Channel class, to store Channel infos with Users and Messages.
+ */
 public class Channel {
 
     protected String uuid;
     protected String name = null;
-    protected String password = null;
-    protected int maxMessageCount = 100;
     private int usersConnectedCount;
     private ArrayList<User> usersConnected;
     private ArrayList<Message> messages;
@@ -26,7 +27,7 @@ public class Channel {
     public String getName() {
         return this.name;
     }
-    public String getDisplayName() {
+    public String getDisplayName() { // Get the name that will be displayed on the UI
         if (this.name == null)
             return "Sans nom";
         else
@@ -50,11 +51,8 @@ public class Channel {
         return messages;
     }
 
-    public boolean userConnect(User user) {
-        if (this.password != null)
-            return false;
+    public void userConnect(User user) {
         this.usersConnected.add(user);
-        return true;
     }
     public void userDisconnect(User user) {
         this.usersConnected.removeIf((u) -> user.getUuid().equals(u.getUuid()));

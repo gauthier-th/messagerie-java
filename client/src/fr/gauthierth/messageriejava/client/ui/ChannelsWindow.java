@@ -9,6 +9,9 @@ import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 
+/**
+ * This class is for the Channels Window.
+ */
 public class ChannelsWindow {
 
     private JPanel root;
@@ -22,25 +25,24 @@ public class ChannelsWindow {
     }
 
     public ChannelsWindow() {
+        // We start the command interpreter for this window:
         this.commandInterpreter = new ChannelsCommandInterpreter(this);
         SocketManager.getInstance().setCommandInterpreter(this.commandInterpreter);
         this.commandInterpreter.reloadChannels();
 
         this.channelsPanel.setLayout(new BoxLayout(this.channelsPanel, BoxLayout.Y_AXIS));
-        createChannel.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                String name = JOptionPane.showInputDialog(null, "Entrez le nom du salon :", "Nouveau salon", JOptionPane.QUESTION_MESSAGE);
-                if (name != null)
-                    ChannelsWindow.this.commandInterpreter.createChannel(name);
-            }
+        createChannel.addActionListener(e -> { // When click on create channel button:
+            String name = JOptionPane.showInputDialog(null, "Entrez le nom du salon :", "Nouveau salon", JOptionPane.QUESTION_MESSAGE);
+            if (name != null)
+                ChannelsWindow.this.commandInterpreter.createChannel(name);
         });
     }
 
-    public void updateChannels(ArrayList<Channel> channels) {
+    public void updateChannels(ArrayList<Channel> channels) { // We update the channels list in the UI.
         System.out.println("update channels: " + channels.size());
-        this.channelsPanel.removeAll();
+        this.channelsPanel.removeAll(); // We remove all labels.
         if (channels.size() > 0) {
+            // And we create a new one for each channel:
             for (Channel channel : channels) {
                 JLabel label = new JLabel(channel.getDisplayName() + " (" + channel.getUsersConnectedCount() + " connecté" + (channel.getUsersConnectedCount() > 1 ? "s" : "") + ")");
                 label.setAlignmentX(0.5f);
@@ -66,12 +68,13 @@ public class ChannelsWindow {
         this.channelsPanel.repaint();
     }
 
-    public void joinChannel(String channelUuid) {
+    public void joinChannel(String channelUuid) { // When an User join a Channel:
         ChannelsWindow.this.commandInterpreter.joinChannel(channelUuid);
 
         JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
         channelsWindowFrame.setVisible(false);
 
+        // We open the Messages Window and hide the Channels Window:
         JFrame frame = new JFrame("Messagerie Java - Discussion");
         MessagesWindow messagesWindow = new MessagesWindow(channelUuid);
         frame.setContentPane(messagesWindow.getRoot());
@@ -79,13 +82,16 @@ public class ChannelsWindow {
         frame.pack();
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+        // When the Messages Window is closed:
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                // We show a confirmation:
                 int reply = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment quitter le salon ?", "Confirmation", JOptionPane.YES_NO_OPTION);
                 if (reply != JOptionPane.YES_OPTION)
                     return;
 
+                // We close the Messages Window and show the Channels one.
                 JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(ChannelsWindow.this.root);
                 channelsWindowFrame.setVisible(true);
                 SocketManager.getInstance().setCommandInterpreter(ChannelsWindow.this.commandInterpreter);
@@ -95,11 +101,12 @@ public class ChannelsWindow {
         });
     }
 
-    public void socketDisconnect() {
-        JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
-        channelsWindowFrame.setVisible(false);
+    public void socketDisconnect() { // Socket disconnect callback.
+        // We open the Main Window and close the Channels one:
         JFrame mainWindowFrame = (JFrame) SwingUtilities.getRoot(MainWindow.getInstance().getRoot());
         mainWindowFrame.setVisible(true);
+        JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
+        channelsWindowFrame.dispose();
         JOptionPane.showMessageDialog(null, "La connexion avec le serveur a été interrompue.", "Déconnecté", JOptionPane.OK_OPTION);
     }
 

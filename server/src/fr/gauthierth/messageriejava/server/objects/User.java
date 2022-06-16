@@ -4,6 +4,10 @@ import fr.gauthierth.messageriejava.server.socket.SocketRunnable;
 
 import java.util.Date;
 
+/**
+ * User class, to store User infos.
+ * This class extends Channel to add the ability to send private messages. (not implemented yet)
+ */
 public class User extends Channel {
 
     private Date loggingDate;

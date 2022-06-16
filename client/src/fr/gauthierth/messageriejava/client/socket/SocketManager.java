@@ -5,6 +5,9 @@ import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
+/**
+ * This class manages socket connection between the client and the server.
+ */
 public class SocketManager implements Runnable {
 
     String address;
@@ -27,7 +30,7 @@ public class SocketManager implements Runnable {
             this.username = username;
     }
 
-    public static SocketManager getInstance() {
+    public static SocketManager getInstance() { // Singleton of SocketManager
         return socketManager;
     }
     public static void startManager(String address, int port, String username) {
@@ -66,7 +69,7 @@ public class SocketManager implements Runnable {
         }
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message) { // Function to send a message to the server socket.
         try {
             this.outputStream.flush();
             this.outputStream.write(message.replace("\n", "\f").getBytes());
@@ -77,15 +80,16 @@ public class SocketManager implements Runnable {
         }
     }
 
-    private void readMessage(String message) {
+    private void readMessage(String message) { // Function to read a message to the socket socket.
         System.out.println("Message received from server:");
         System.out.println(message);
         if (this.commandInterpreter != null)
             commandInterpreter.executeCommand(message);
     }
 
-    private void waitMessages() throws Exception {
+    private void waitMessages() throws Exception { // Function to read new messages on the socket connection.
         try {
+            // Creation of the socket and the input and output stream:
             System.out.println("Connecting to host " + this.address + ":" + this.port + "...");
             this.socket = new Socket(this.address, this.port);
             InputStream inputStream = this.socket.getInputStream();
@@ -94,7 +98,7 @@ public class SocketManager implements Runnable {
             if (username != null)
                 this.sendMessage("username " + username);
             System.out.println("Connected!");
-            if (this.connectedCallback != null) {
+            if (this.connectedCallback != null) { // Callback when successfully connected:
                 this.connectedCallback.run();
                 this.connectedCallback = null;
             }
@@ -105,23 +109,28 @@ public class SocketManager implements Runnable {
             return;
         }
 
-        while (true) {
+        while (true) { // We continuously wait for new messages on the socket connection.
             try {
-                String line = this.bufferedReader.readLine();
+                String line = this.bufferedReader.readLine(); // If we detect a new line of the input stream:
                 if (line == null || line.equalsIgnoreCase("QUIT")) {
+                    // We close the socket connection:
                     this.bufferedReader.close();
                     this.outputStream.close();
-                    socket.close();
+                    this.socket.close();
                 }
                 else {
+                    // We replace \f by \n in order to not confuse new lines (\n) and message end (\f).
                     this.readMessage(line.replace("\f", "\n"));
                 }
             }
             catch (Exception e) {
                 System.out.println("Server disconnected");
-                if (this.commandInterpreter != null)
+                // We close the socket connection:
+                if (this.commandInterpreter != null) // Disconnect callback:
                     commandInterpreter.onDisconnect();
                 try {
+                    this.bufferedReader.close();
+                    this.outputStream.close();
                     this.socket.close();
                 }
                 catch (Exception exc) {}

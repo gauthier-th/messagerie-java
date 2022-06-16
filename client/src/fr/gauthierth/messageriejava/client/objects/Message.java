@@ -1,5 +1,8 @@
 package fr.gauthierth.messageriejava.client.objects;
 
+/**
+ * Message class, to store Message infos.
+ */
 public class Message {
 
     private User author;

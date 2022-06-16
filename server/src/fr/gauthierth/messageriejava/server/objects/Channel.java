@@ -2,12 +2,13 @@ package fr.gauthierth.messageriejava.server.objects;
 
 import java.util.ArrayList;
 
+/**
+ * Channel class, to store Channel infos with Users and Messages.
+ */
 public class Channel {
 
     protected String uuid;
     protected String name = null;
-    protected String password = null;
-    protected int maxMessageCount = 100;
     private ArrayList<User> usersConnected;
     private ArrayList<Message> messages;
 
@@ -34,20 +35,6 @@ public class Channel {
         this.name = name;
     }
 
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public int getMaxMessageCount() {
-        return maxMessageCount;
-    }
-    public void setMaxMessageCount(int maxMessageCount) {
-        this.maxMessageCount = maxMessageCount;
-    }
-
     public ArrayList<User> getUsersConnected() {
         return usersConnected;
     }
@@ -55,19 +42,14 @@ public class Channel {
         return messages;
     }
 
-    public boolean userConnect(User user) {
-        if (this.password != null)
-            return false;
+    public void userConnect(User user) {
         this.usersConnected.add(user);
-        return true;
     }
     public void userDisconnect(User user) {
         this.usersConnected.removeIf((u) -> user.getUuid().equals(u.getUuid()));
     }
     public void addMessage(Message message) {
         this.messages.add(message);
-        if (this.messages.size() > this.maxMessageCount)
-            this.messages.remove(0);
     }
 
 }

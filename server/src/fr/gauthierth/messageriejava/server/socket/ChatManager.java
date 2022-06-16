@@ -8,6 +8,9 @@ import fr.gauthierth.messageriejava.server.objects.User;
 
 import java.util.ArrayList;
 
+/**
+ * This class makes the link between events (connect, create channel, ...) and data objects (Channel, Message, User).
+ */
 public class ChatManager {
 
     ArrayList<User> users;
@@ -24,23 +27,25 @@ public class ChatManager {
         return this.users;
     }
 
-    public User newUser(String uuid, SocketRunnable socketRunnable) {
+    public User newUser(String uuid, SocketRunnable socketRunnable) { // We save the user to the user list.
         User user = new User(uuid, socketRunnable);
         users.add(user);
         return user;
     }
 
-    public Channel connectToChannel(User user, String channelUUID) {
+    public Channel connectToChannel(User user, String channelUUID) { // Connection to a channel.
         Channel channel = findChannelByUuid(channelUUID);
         if (channel != null)
             channel.userConnect(user);
         this.configSaver.save(this.channels);
 
+        // We send the join channel event to all people in the channel:
         String commandJoinChannel = CommandInterpreter.userJoinToCommand(user);
         for (User usr : channel.getUsersConnected()) {
             if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
                 usr.getSocketRunnable().sendMessage(commandJoinChannel);
         }
+        // We send the list channel event to every user connected (to update the user count of the channel list):
         String commandListChannel = CommandInterpreter.channelListedToCommand(this.channels);
         for (User usr : this.users) {
             if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
@@ -50,20 +55,22 @@ public class ChatManager {
         return channel;
     }
 
-    public Channel userDisconnect(String uuid) {
+    public Channel userDisconnect(String uuid) { // Disconnection of the channel.
         User user = findUserByUuid(uuid);
         Channel channel = findUserChannel(user);
         if (channel != null) {
             channel.userDisconnect(user);
-            //if (channel.getUsersConnected().size() == 0) // delete channel if no more user
+            //if (channel.getUsersConnected().size() == 0) // Delete channel if no more user.
             //    channels.remove(channel);
             this.configSaver.save(this.channels);
 
+            // We send the leave channel event to all people in the channel:
             String commandLeaveChannel = CommandInterpreter.userLeaveToCommand(user);
             for (User usr : channel.getUsersConnected()) {
                 if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
                     usr.getSocketRunnable().sendMessage(commandLeaveChannel);
             }
+            // We send the list channel event to every user connected (to update the user count of the channel list):
             String commandListChannel = CommandInterpreter.channelListedToCommand(this.channels);
             for (User usr : this.users) {
                 if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
@@ -74,11 +81,12 @@ public class ChatManager {
         return channel;
     }
 
-    public Channel createChannel(User user) {
+    public Channel createChannel(User user) { // Create a new channel
         Channel channel = new Channel(Utils.getUUID());
         this.channels.add(channel);
         this.configSaver.save(this.channels);
 
+        // We send the list channel event to every user connected (to update the user count of the channel list):
         String command = CommandInterpreter.channelListedToCommand(this.channels);
         for (User usr : this.users) {
             if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
@@ -88,7 +96,7 @@ public class ChatManager {
         return channel;
     }
 
-    public Message sendMessage(User user, String content) {
+    public Message sendMessage(User user, String content) { // Send a message to a channel
         Channel channel = findUserChannel(user);
         if (channel == null)
             return null;
@@ -96,6 +104,7 @@ public class ChatManager {
         channel.addMessage(message);
         this.configSaver.save(this.channels);
 
+        // We send the new message event to all people in the channel:
         String command = CommandInterpreter.messageToCommand(message);
         for (User usr : channel.getUsersConnected()) {
             if (!user.getUuid().equalsIgnoreCase(usr.getUuid()))
@@ -109,7 +118,7 @@ public class ChatManager {
         return this.channels;
     }
 
-    public User findUserByUuid(String uuid) {
+    public User findUserByUuid(String uuid) { // Utility function: find a User by its UUID.
         for (User user : this.getUsers()) {
             if (user.getUuid().equalsIgnoreCase(uuid))
                 return user;
@@ -117,7 +126,7 @@ public class ChatManager {
         return null;
     }
 
-    public Channel findChannelByUuid(String uuid) {
+    public Channel findChannelByUuid(String uuid) { // Utility function: find a Channel by its UUID.
         Channel channel = null;
         for (Channel chan : this.channels) {
             if (chan.getUuid().equalsIgnoreCase(uuid)) {
@@ -134,7 +143,7 @@ public class ChatManager {
         return channel;
     }
 
-    public Channel findUserChannel(User user) {
+    public Channel findUserChannel(User user) { // Utility function: find the Channel where an User is connected.
         Channel channel = null;
         for (Channel chan : this.channels) {
             if (chan.getUsersConnected().contains(user)) {

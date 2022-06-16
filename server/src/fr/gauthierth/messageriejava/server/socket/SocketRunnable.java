@@ -3,6 +3,9 @@ package fr.gauthierth.messageriejava.server.socket;
 import java.io.*;
 import java.net.Socket;
 
+/**
+ * This class is a Thread for handling the Socket connection between client and server.
+ */
 public class SocketRunnable implements Runnable {
 
     Socket socket;
@@ -27,7 +30,7 @@ public class SocketRunnable implements Runnable {
         }
     }
 
-    public void sendMessage(String message) {
+    public void sendMessage(String message) { // Function to send a message to the client socket.
         if (message == null || message.length() == 0)
             return;
         try {
@@ -40,40 +43,53 @@ public class SocketRunnable implements Runnable {
         catch (Exception e) {}
     }
 
-    private void readMessage(String message) {
-        System.out.println("fr.gauthierth.messageriejava.Message received from client:");
+    private void readMessage(String message) { // Function to read a message to the client socket.
+        System.out.println("Message received from client:");
         System.out.println(message);
         String result = this.socketManager.getCommandInterpreter().executeCommand(this.uuid, message);
         this.sendMessage(result);
     }
 
-    private void waitMessages() throws Exception {
+    private void waitMessages() throws Exception { // Function to read new messages on the socket connection.
         System.out.println("New client detected");
 
         try {
+            // Creation of the input and output stream:
             InputStream inputStream = socket.getInputStream();
             this.bufferedReader = new BufferedReader(new InputStreamReader(inputStream));
             this.outputStream = new DataOutputStream(socket.getOutputStream());
         }
         catch (IOException e) {
             System.out.println("Exception in message reader");
-            e.printStackTrace();
-            throw new Exception();
         }
-        while (true) {
+        while (true) { // We continuously wait for new messages on the socket connection.
             try {
-                String line = this.bufferedReader.readLine();
+                String line = this.bufferedReader.readLine(); // If we detect a new line of the input stream:
                 if (line == null || line.equalsIgnoreCase("QUIT")) {
-                    this.bufferedReader.close();
-                    this.outputStream.close();
-                    socket.close();
+                    // We close the socket connection:
+                    try {
+                        this.bufferedReader.close();
+                        this.outputStream.close();
+                        this.socket.close();
+                    }
+                    catch (Exception exc) {}
+                    this.socketManager.runnableDisconnect(uuid);
                 }
                 else {
-                    this.readMessage(line.replace("\f", "\n"));
+                    // We replace \f by \n in order to not confuse new lines (\n) and message end (\f).
+                    String message = line.replace("\f", "\n");
+                    this.readMessage(message);
                 }
             }
             catch (Exception e) {
                 System.out.println("Client disconnected");
+                // We close the socket connection:
+                try {
+                    this.bufferedReader.close();
+                    this.outputStream.close();
+                    this.socket.close();
+                }
+                catch (Exception exc) {}
                 this.socketManager.runnableDisconnect(uuid);
                 return;
             }

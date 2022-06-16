@@ -5,6 +5,9 @@ import java.io.FileReader;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 
+/**
+ * A class to store connection informations of the user (host, port, username).
+ */
 public class ConfigSaver {
 
     private String filename;
@@ -21,7 +24,7 @@ public class ConfigSaver {
             ArrayList<String> lines = new ArrayList<>();
             BufferedReader br = new BufferedReader(new FileReader(filename));
             String line = br.readLine();
-            while (line != null) {
+            while (line != null) { // For every lines in the file:
                 lines.add(line);
                 line = br.readLine();
             }

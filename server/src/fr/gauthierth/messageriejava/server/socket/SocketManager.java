@@ -7,6 +7,9 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.HashMap;
 
+/**
+ * This class manages incoming socket connections of the users.
+ */
 public class SocketManager implements Runnable {
 
     int port;
@@ -39,7 +42,7 @@ public class SocketManager implements Runnable {
         catch (IOException e) {
             e.printStackTrace();
         }
-        while (true) {
+        while (true) { // We listen continuously to new socket connection from users.
             try {
                 System.out.println("Wainting for clients...");
                 socket = serverSocket.accept();
@@ -47,7 +50,7 @@ public class SocketManager implements Runnable {
             catch (IOException e) {
                 System.out.println("I/O error: " + e);
             }
-            // new thread for a client
+            // We create a new thread for the new client:
             String uuid = Utils.getUUID();
             SocketRunnable runnable = new SocketRunnable(socket, this, uuid);
             Thread socketThread = new Thread(runnable);
