@@ -6,6 +6,10 @@
 Le projet possède deux projets Java : un `client` et un `server`.
 Ce projet a été créé avec IntelliJ IDEA.
 
+## Téléchargement :
+[Client](https://github.com/gauthier-th/messagerie-java/releases/download/untagged-20e15be13e623855d0bd/MessagerieJavaClient.jar)
+[Serveur](https://github.com/gauthier-th/messagerie-java/releases/download/untagged-20e15be13e623855d0bd/MessagerieJavaServer.jar)
+
 ## Aperçu du projet :
 
 ### Écran de connexion au serveur :
