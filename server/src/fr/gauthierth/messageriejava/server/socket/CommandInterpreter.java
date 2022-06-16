@@ -109,7 +109,7 @@ public class CommandInterpreter {
 
     private String username(User user, String args) {
         if (args.length() > 0)
-            user.setName(args);
+            user.setName(args.replaceAll("\\s+", ""));
         return "";
     }
 

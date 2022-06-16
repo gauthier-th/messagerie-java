@@ -38,6 +38,14 @@ public class MainWindow {
                     MainWindow.this.connect();
             }
         });
+        textFieldUsername.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                super.keyReleased(e);
+                if (String.valueOf(e.getKeyChar()).replaceAll("\\s+", "").length() == 0)
+                    textFieldUsername.setText(textFieldUsername.getText().replaceAll("\\s+", ""));
+            }
+        });
     }
 
     public void connect() {
