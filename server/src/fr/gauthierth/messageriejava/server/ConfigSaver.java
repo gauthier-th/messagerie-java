@@ -41,9 +41,7 @@ public class ConfigSaver {
                 line = br.readLine();
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        catch (Exception e) {}
         return channels;
     }
 
