@@ -11,6 +11,7 @@ import java.awt.event.KeyEvent;
 
 public class MainWindow {
 
+    private static MainWindow instance;
     private JPanel root;
     private JTextField textFieldAddress;
     private JTextField textFieldPort;
@@ -19,6 +20,7 @@ public class MainWindow {
     private ConfigSaver configSaver = new ConfigSaver("config.txt");
 
     public MainWindow() {
+        MainWindow.instance = this;
         configSaver.load();
         textFieldAddress.setText(configSaver.getHost());
         textFieldPort.setText(String.valueOf(configSaver.getPort()));
@@ -46,6 +48,14 @@ public class MainWindow {
                     textFieldUsername.setText(textFieldUsername.getText().replaceAll("\\s+", ""));
             }
         });
+    }
+
+    public static MainWindow getInstance() {
+        return MainWindow.instance;
+    }
+
+    public JPanel getRoot() {
+        return this.root;
     }
 
     public void connect() {

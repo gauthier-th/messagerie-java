@@ -27,6 +27,10 @@ public class ChannelsCommandInterpreter implements CommandInterpreter {
         return null;
     }
 
+    public void onDisconnect() {
+        this.channelsWindow.socketDisconnect();
+    }
+
     public void reloadChannels() {
         SocketManager.getInstance().sendMessage("channel list");
     }

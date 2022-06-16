@@ -1,5 +1,6 @@
 package fr.gauthierth.messageriejava.client.socket;
 
+import javax.swing.*;
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
@@ -79,9 +80,8 @@ public class SocketManager implements Runnable {
     private void readMessage(String message) {
         System.out.println("Message received from server:");
         System.out.println(message);
-        if (this.commandInterpreter != null) {
+        if (this.commandInterpreter != null)
             commandInterpreter.executeCommand(message);
-        }
     }
 
     private void waitMessages() throws Exception {
@@ -100,8 +100,9 @@ public class SocketManager implements Runnable {
             }
         }
         catch (IOException e) {
-            e.printStackTrace();
-            throw new Exception();
+            System.out.println("Connexion refused.");
+            JOptionPane.showMessageDialog(null, "Impossible de se connecter au serveur.");
+            return;
         }
 
         while (true) {
@@ -116,14 +117,15 @@ public class SocketManager implements Runnable {
                     this.readMessage(line.replace("\f", "\n"));
                 }
             }
-            catch (SocketException e) {
+            catch (Exception e) {
                 System.out.println("Server disconnected");
+                if (this.commandInterpreter != null)
+                    commandInterpreter.onDisconnect();
+                try {
+                    this.socket.close();
+                }
+                catch (Exception exc) {}
                 return;
-            }
-            catch (IOException e) {
-                System.out.println("Exception in message reader");
-                e.printStackTrace();
-                throw new Exception();
             }
         }
     }

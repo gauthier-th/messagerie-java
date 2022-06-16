@@ -4,4 +4,6 @@ public interface CommandInterpreter {
 
     String executeCommand(String command);
 
+    void onDisconnect();
+
 }

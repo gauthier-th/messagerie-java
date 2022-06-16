@@ -94,4 +94,12 @@ public class MessagesWindow {
         this.messagesPane.repaint();
     }
 
+    public void socketDisconnect() {
+        JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
+        channelsWindowFrame.setVisible(false);
+        JFrame mainWindowFrame = (JFrame) SwingUtilities.getRoot(MainWindow.getInstance().getRoot());
+        mainWindowFrame.setVisible(true);
+        JOptionPane.showMessageDialog(null, "La connexion avec le serveur a été interrompue.", "Déconnecté", JOptionPane.OK_OPTION);
+    }
+
 }

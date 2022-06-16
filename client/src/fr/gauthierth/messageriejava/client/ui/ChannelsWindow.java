@@ -82,6 +82,10 @@ public class ChannelsWindow {
         frame.addWindowListener(new java.awt.event.WindowAdapter() {
             @Override
             public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+                int reply = JOptionPane.showConfirmDialog(null, "Voulez-vous vraiment quitter le salon ?", "Confirmation", JOptionPane.YES_NO_OPTION);
+                if (reply != JOptionPane.YES_OPTION)
+                    return;
+
                 JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(ChannelsWindow.this.root);
                 channelsWindowFrame.setVisible(true);
                 SocketManager.getInstance().setCommandInterpreter(ChannelsWindow.this.commandInterpreter);
@@ -89,6 +93,14 @@ public class ChannelsWindow {
                 ChannelsWindow.this.commandInterpreter.reloadChannels();
             }
         });
+    }
+
+    public void socketDisconnect() {
+        JFrame channelsWindowFrame = (JFrame) SwingUtilities.getRoot(this.root);
+        channelsWindowFrame.setVisible(false);
+        JFrame mainWindowFrame = (JFrame) SwingUtilities.getRoot(MainWindow.getInstance().getRoot());
+        mainWindowFrame.setVisible(true);
+        JOptionPane.showMessageDialog(null, "La connexion avec le serveur a été interrompue.", "Déconnecté", JOptionPane.OK_OPTION);
     }
 
 }

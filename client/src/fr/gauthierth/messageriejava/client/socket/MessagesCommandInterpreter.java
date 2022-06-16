@@ -32,6 +32,10 @@ public class MessagesCommandInterpreter implements CommandInterpreter {
         return null;
     }
 
+    public void onDisconnect() {
+        this.messagesWindow.socketDisconnect();
+    }
+
     public void reloadChannel() {
         SocketManager.getInstance().sendMessage("channel get " + this.messagesWindow.getChannelUuid());
     }
