@@ -73,15 +73,10 @@ public class SocketRunnable implements Runnable {
                     this.readMessage(line.replace("\f", "\n"));
                 }
             }
-            catch (SocketException e) {
+            catch (Exception e) {
                 System.out.println("Client disconnected");
                 this.socketManager.runnableDisconnect(uuid);
                 return;
-            }
-            catch (IOException e) {
-                System.out.println("Exception in message reader");
-                e.printStackTrace();
-                throw new Exception();
             }
         }
     }

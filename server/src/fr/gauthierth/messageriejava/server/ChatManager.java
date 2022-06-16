@@ -6,10 +6,12 @@ public class ChatManager {
 
     ArrayList<User> users;
     ArrayList<Channel> channels;
+    ConfigSaver configSaver;
 
     ChatManager() {
         this.users = new ArrayList<>();
-        this.channels = new ArrayList<>();
+        this.configSaver = new ConfigSaver("config.txt");
+        this.channels = this.configSaver.load();
     }
 
     public ArrayList<User> getUsers() {
@@ -26,6 +28,7 @@ public class ChatManager {
         Channel channel = findChannelByUuid(channelUUID);
         if (channel != null)
             channel.userConnect(user);
+        this.configSaver.save(this.channels);
 
         String commandJoinChannel = CommandInterpreter.userJoinToCommand(user);
         for (User usr : channel.getUsersConnected()) {
@@ -48,6 +51,7 @@ public class ChatManager {
             channel.userDisconnect(user);
             //if (channel.getUsersConnected().size() == 0) // delete channel if no more user
             //    channels.remove(channel);
+            this.configSaver.save(this.channels);
 
             String commandLeaveChannel = CommandInterpreter.userLeaveToCommand(user);
             for (User usr : channel.getUsersConnected()) {
@@ -67,6 +71,7 @@ public class ChatManager {
     public Channel createChannel(User user) {
         Channel channel = new Channel(Utils.getUUID());
         this.channels.add(channel);
+        this.configSaver.save(this.channels);
 
         String command = CommandInterpreter.channelListedToCommand(this.channels);
         for (User usr : this.users) {
@@ -83,6 +88,7 @@ public class ChatManager {
             return null;
         Message message = new Message(user, content, channel);
         channel.addMessage(message);
+        this.configSaver.save(this.channels);
 
         String command = CommandInterpreter.messageToCommand(message);
         for (User usr : channel.getUsersConnected()) {

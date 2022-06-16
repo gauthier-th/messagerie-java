@@ -31,9 +31,7 @@ public class ConfigSaver {
             if (username.length() > 0)
                 this.username = username;
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        catch (Exception e) {}
     }
 
     public void save() {
@@ -44,9 +42,7 @@ public class ConfigSaver {
                 out.println(this.username == null ? "" : this.username);
             }
         }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        catch (Exception e) {}
     }
 
     public String getFilename() {
