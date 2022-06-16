@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava;
+package fr.gauthierth.messageriejava.server;
 
 import java.io.IOException;
 import java.net.ServerSocket;

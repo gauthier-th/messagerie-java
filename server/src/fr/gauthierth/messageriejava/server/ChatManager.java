@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava;
+package fr.gauthierth.messageriejava.server;
 
 import java.util.ArrayList;
 
@@ -46,8 +46,8 @@ public class ChatManager {
         Channel channel = findUserChannel(user);
         if (channel != null) {
             channel.userDisconnect(user);
-            if (channel.getUsersConnected().size() == 0)
-                channels.remove(channel);
+            //if (channel.getUsersConnected().size() == 0) // delete channel if no more user
+            //    channels.remove(channel);
 
             String commandLeaveChannel = CommandInterpreter.userLeaveToCommand(user);
             for (User usr : channel.getUsersConnected()) {

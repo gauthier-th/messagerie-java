@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava;
+package fr.gauthierth.messageriejava.client;
 
 import java.io.*;
 import java.net.Socket;

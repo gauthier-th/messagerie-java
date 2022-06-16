@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava;
+package fr.gauthierth.messageriejava.server;
 
 import java.util.ArrayList;
 
@@ -7,14 +7,12 @@ public class Channel {
     protected String uuid;
     protected String name = null;
     protected ChannelOptions channelOptions;
-    private int usersConnectedCount;
     private ArrayList<User> usersConnected;
     private ArrayList<Message> messages;
 
     Channel(String uuid) {
         this.uuid = uuid;
         this.channelOptions = new ChannelOptions();
-        this.usersConnectedCount = 0;
         this.usersConnected = new ArrayList<>();
         this.messages = new ArrayList<>();
     }
@@ -38,13 +36,6 @@ public class Channel {
 
     public ChannelOptions getChannelOptions() {
         return this.channelOptions;
-    }
-
-    public int getUsersConnectedCount() {
-        return usersConnectedCount;
-    }
-    public void setUsersConnectedCount(int usersConnectedCount) {
-        this.usersConnectedCount = usersConnectedCount;
     }
 
     public ArrayList<User> getUsersConnected() {

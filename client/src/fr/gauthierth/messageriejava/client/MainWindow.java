@@ -1,4 +1,4 @@
-package fr.gauthierth.messageriejava;
+package fr.gauthierth.messageriejava.client;
 
 import javax.swing.*;
 import java.awt.event.ActionEvent;
